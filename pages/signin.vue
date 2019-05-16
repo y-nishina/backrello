@@ -34,7 +34,7 @@
             { required: true, message: 'APIキーは必ず入力してください' }
           ]"
         >
-          <el-input v-model="signinForm.spaceKey"></el-input>
+          <el-input v-model="signinForm.apiKey"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="signin()">ログイン</el-button>
@@ -45,6 +45,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
   data() {
     return {
@@ -53,6 +54,16 @@ export default {
         apiKey: ''
       }
     }
+  },
+  methods: {
+    async signin() {
+      const result = await this.doAuthentication(this.signinForm)
+      if (result === true) {
+        // ログインに成功したらメイン画面に遷移する
+        this.$router.push({ path: '/', query: {} })
+      }
+    },
+    ...mapActions(['doAuthentication'])
   }
 }
 </script>
