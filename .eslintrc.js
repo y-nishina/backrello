@@ -19,5 +19,7 @@ module.exports = {
   ],
   // add your custom rules here
   rules: {
+    'max-len': [2, { code: 120 }],
+    'no-console': 1,
   }
 }
