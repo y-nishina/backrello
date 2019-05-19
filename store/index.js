@@ -1,11 +1,16 @@
 import axios from 'axios'
 
+const URL_SPACE = 'space'
+
 export const actions = {
   async doAuthentication(context, params) {
     const response = await axios.get(
-      `https://${params.spaceKey}.backlog.jp/api/v2/space?apiKey=${
-        params.apiKey
-      }`
+      `https://${params.spaceKey}.backlog.jp/api/v2/${URL_SPACE}`,
+      {
+        params: {
+          apiKey: params.apiKey
+        }
+      }
     )
 
     // ステータスコードが200以外ならNG
