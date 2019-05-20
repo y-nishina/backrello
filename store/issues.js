@@ -38,5 +38,26 @@ export const actions = {
       return []
     }
     return response.data
+  },
+  async changeIssueStatus(context, params) {
+    const response = await axios.patch(
+      `https://${sessionStorage.getItem(
+        'spaceKey'
+      )}.backlog.jp/api/v2/${URL_ISSUES}/${params.id}`,
+      {
+        statusId: params.statusId
+      },
+      {
+        params: {
+          apiKey: sessionStorage.getItem('apiKey')
+        }
+      }
+    )
+
+    // ステータスコードが200以外ならNG
+    if (response.status !== 200) {
+      return false
+    }
+    return true
   }
 }

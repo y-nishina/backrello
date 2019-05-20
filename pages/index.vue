@@ -5,7 +5,10 @@
       <el-row :gutter="20">
         <template v-for="status in statusList">
           <el-col :key="status.id" :span="20 / statusList.length">
-            <Issues v-bind="{ id: status.id, name: status.name }"></Issues>
+            <Issues
+              v-bind="{ statusId: status.id, statusName: status.name }"
+              @update="updateStatusList()"
+            ></Issues>
           </el-col>
         </template>
       </el-row>
@@ -40,9 +43,17 @@ export default {
     }
 
     // 状態一覧を取得する
-    this.statusList = await this.fetchStatuses()
+    this.statusList = await this.getStatusList()
   },
   methods: {
+    async getStatusList() {
+      const statusList = await this.fetchStatuses()
+      return statusList
+    },
+    async updateStatusList() {
+      this.statusList = []
+      this.statusList = await this.getStatusList()
+    },
     ...mapActions('issues', ['fetchStatuses'])
   }
 }
