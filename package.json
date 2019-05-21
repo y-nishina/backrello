@@ -1,7 +1,7 @@
 {
-  "name": "backlog-like-trello",
+  "name": "backrello",
   "version": "1.0.0",
-  "description": "My peachy Nuxt.js project",
+  "description": "Show Backlog issues like Trello",
   "author": "yuta nishina",
   "private": true,
   "scripts": {

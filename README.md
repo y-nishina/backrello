@@ -1,6 +1,6 @@
-# backlog-like-trello
+# backrello
 
-> My peachy Nuxt.js project
+> Show Backlog issues like Trello
 
 ## Build Setup
 
