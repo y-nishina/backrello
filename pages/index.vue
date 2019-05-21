@@ -1,68 +1,60 @@
 <template>
-  <section class="container">
-    <div>
-      <logo />
-      <h1 class="title">
-        backlog-like-trello
-      </h1>
-      <h2 class="subtitle">
-        My peachy Nuxt.js project
-      </h2>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          class="button--green"
-        >Documentation</a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          class="button--grey"
-        >GitHub</a>
-      </div>
-    </div>
-  </section>
+  <div>
+    <template v-if="loggedInFlag">
+      <h2>課題一覧</h2>
+      <el-row :gutter="20">
+        <template v-for="status in statusList">
+          <el-col :key="status.id" :span="20 / statusList.length">
+            <Issues
+              v-bind="{ statusId: status.id, statusName: status.name }"
+              @update="updateStatusList()"
+            ></Issues>
+          </el-col>
+        </template>
+      </el-row>
+    </template>
+    <template v-else>
+      <!-- TODO：未ログインの場合に一瞬チラッと見える画面をどうするか検討する -->
+      &nbsp;
+    </template>
+  </div>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
-
+import { mapActions } from 'vuex'
+import Issues from '~/components/issues'
 export default {
   components: {
-    Logo
+    Issues
+  },
+  data() {
+    return {
+      loggedInFlag: false,
+      statusList: []
+    }
+  },
+  async beforeMount() {
+    // sessionStorageにapiKeyが保存されているかどうかでログイン状態を判別
+    this.loggedInFlag = !!sessionStorage.getItem('apiKey')
+    if (!this.loggedInFlag) {
+      // ログインしていなければログイン画面にリダイレクトする
+      this.$router.push({ path: '/signin/', query: {} })
+      return
+    }
+
+    // 状態一覧を取得する
+    this.statusList = await this.getStatusList()
+  },
+  methods: {
+    async getStatusList() {
+      const statusList = await this.fetchStatuses()
+      return statusList
+    },
+    async updateStatusList() {
+      this.statusList = []
+      this.statusList = await this.getStatusList()
+    },
+    ...mapActions('issues', ['fetchStatuses'])
   }
 }
 </script>
-
-<style>
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
-}
-</style>
