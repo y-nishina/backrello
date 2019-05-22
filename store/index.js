@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 const URL_SPACE = 'space'
+const URL_PROJECTS = 'projects'
 
 export const actions = {
   async doAuthentication(context, params) {
@@ -27,5 +28,23 @@ export const actions = {
     sessionStorage.setItem('apiKey', params.apiKey)
 
     return true
+  },
+  async fetchProjects(contex, params) {
+    const response = await axios.get(
+      `https://${sessionStorage.getItem(
+        'spaceKey'
+      )}.backlog.jp/api/v2/${URL_PROJECTS}`,
+      {
+        params: {
+          apiKey: sessionStorage.getItem('apiKey')
+        }
+      }
+    )
+
+    // ステータスコードが200以外ならNG
+    if (response.status !== 200) {
+      return []
+    }
+    return response.data
   }
 }

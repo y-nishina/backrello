@@ -22,15 +22,21 @@ export const actions = {
     return response.data
   },
   async fetchIssues(context, params) {
+    const queryParams = {
+      apiKey: sessionStorage.getItem('apiKey'),
+      statusId: params.statusId
+    }
+    // プロジェクトが選択されていない場合はprojectIdを指定しない（全プロジェクトから取得）
+    if (params.projectId[0] !== null) {
+      queryParams.projectId = params.projectId
+    }
+
     const response = await axios.get(
       `https://${sessionStorage.getItem(
         'spaceKey'
       )}.backlog.jp/api/v2/${URL_ISSUES}`,
       {
-        params: {
-          apiKey: sessionStorage.getItem('apiKey'),
-          statusId: params.statusId
-        }
+        params: queryParams
       }
     )
     if (response.status !== 200) {
