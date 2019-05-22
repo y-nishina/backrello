@@ -35,6 +35,9 @@ export default {
     statusName: {
       type: String,
       required: true
+    },
+    projectId: {
+      type: Number
     }
   },
   data() {
@@ -45,7 +48,8 @@ export default {
   },
   async beforeMount() {
     this.issueList = await this.fetchIssues({
-      statusId: [this.statusId]
+      statusId: [this.statusId],
+      projectId: [this.projectId]
     })
   },
   methods: {
