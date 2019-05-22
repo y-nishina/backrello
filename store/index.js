@@ -2,6 +2,9 @@ import axios from 'axios'
 
 const URL_SPACE = 'space'
 const URL_PROJECTS = 'projects'
+const URL_CATEGORIES = 'categories'
+const URL_VERSIONS = 'versions'
+const URL_USERS = 'users'
 
 export const actions = {
   async doAuthentication(context, params) {
@@ -34,6 +37,62 @@ export const actions = {
       `https://${sessionStorage.getItem(
         'spaceKey'
       )}.backlog.jp/api/v2/${URL_PROJECTS}`,
+      {
+        params: {
+          apiKey: sessionStorage.getItem('apiKey')
+        }
+      }
+    )
+
+    // ステータスコードが200以外ならNG
+    if (response.status !== 200) {
+      return []
+    }
+    return response.data
+  },
+  async fetchCategories(contex, params) {
+    const response = await axios.get(
+      `https://${sessionStorage.getItem(
+        'spaceKey'
+      )}.backlog.jp/api/v2/${URL_PROJECTS}/${
+        params.projectId
+      }/${URL_CATEGORIES}`,
+      {
+        params: {
+          apiKey: sessionStorage.getItem('apiKey')
+        }
+      }
+    )
+
+    // ステータスコードが200以外ならNG
+    if (response.status !== 200) {
+      return []
+    }
+    return response.data
+  },
+  async fetchMilestones(contex, params) {
+    const response = await axios.get(
+      `https://${sessionStorage.getItem(
+        'spaceKey'
+      )}.backlog.jp/api/v2/${URL_PROJECTS}/${params.projectId}/${URL_VERSIONS}`,
+      {
+        params: {
+          apiKey: sessionStorage.getItem('apiKey')
+        }
+      }
+    )
+
+    // ステータスコードが200以外ならNG
+    if (response.status !== 200) {
+      return []
+    }
+    return response.data
+  },
+  async fetchAssignees(contex, params) {
+    const response = await axios.get(
+      `https://${sessionStorage.getItem(
+        'spaceKey'
+      )}.backlog.jp/api/v2/${URL_PROJECTS}/${params.projectId}/${URL_USERS}`,
       {
         params: {
           apiKey: sessionStorage.getItem('apiKey')

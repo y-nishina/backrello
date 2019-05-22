@@ -24,11 +24,27 @@ export const actions = {
   async fetchIssues(context, params) {
     const queryParams = {
       apiKey: sessionStorage.getItem('apiKey'),
-      statusId: params.statusId
+      statusId: params.statusId,
+      count: 20,
+      sort: 'updated',
+      order: 'desc'
     }
     // プロジェクトが選択されていない場合はprojectIdを指定しない（全プロジェクトから取得）
     if (params.projectId[0] !== null) {
       queryParams.projectId = params.projectId
+    }
+
+    if (params.categoryIdList.length > 0) {
+      queryParams.categoryId = params.categoryIdList
+    }
+    if (params.milestoneIdList.length > 0) {
+      queryParams.milestoneId = params.milestoneIdList
+    }
+    if (params.assigneeIdList.length > 0) {
+      queryParams.assigneeId = params.assigneeIdList
+    }
+    if (params.keyword !== '') {
+      queryParams.keyword = params.keyword
     }
 
     const response = await axios.get(
