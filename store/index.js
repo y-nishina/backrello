@@ -50,7 +50,7 @@ export const actions = {
     }
     return response.data
   },
-  async fetchCategories(contex, params) {
+  async fetchCategories(context, params) {
     const response = await axios.get(
       `https://${sessionStorage.getItem(
         'spaceKey'
@@ -70,7 +70,7 @@ export const actions = {
     }
     return response.data
   },
-  async fetchMilestones(contex, params) {
+  async fetchMilestones(context, params) {
     const response = await axios.get(
       `https://${sessionStorage.getItem(
         'spaceKey'
@@ -88,7 +88,7 @@ export const actions = {
     }
     return response.data
   },
-  async fetchAssignees(contex, params) {
+  async fetchAssignees(context, params) {
     const response = await axios.get(
       `https://${sessionStorage.getItem(
         'spaceKey'
