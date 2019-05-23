@@ -52,6 +52,10 @@ export default {
       type: Array,
       default: () => []
     },
+    priorityIdList: {
+      type: Array,
+      default: () => []
+    },
     keyword: {
       type: String,
       default: ''
@@ -70,6 +74,7 @@ export default {
       categoryIdList: this.categoryIdList,
       milestoneIdList: this.milestoneIdList,
       assigneeIdList: this.assigneeIdList,
+      priorityIdList: this.priorityIdList,
       keyword: this.keyword
     })
   },

@@ -43,6 +43,9 @@ export const actions = {
     if (params.assigneeIdList.length > 0) {
       queryParams.assigneeId = params.assigneeIdList
     }
+    if (params.priorityIdList.length > 0) {
+      queryParams.priorityId = params.priorityIdList
+    }
     if (params.keyword !== '') {
       queryParams.keyword = params.keyword
     }

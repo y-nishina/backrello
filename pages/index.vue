@@ -86,6 +86,25 @@
           </el-form>
         </el-col>
         <el-col :span="4">
+          <el-form label-position="top" :inline="true">
+            <el-form-item label="優先度">
+              <el-select
+                v-model="selectedPriorityIdList"
+                multiple
+                @change="onChangeSearchConditions"
+              >
+                <el-option
+                  v-for="priority in priorityList"
+                  :key="priority.id"
+                  :label="priority.name"
+                  :value="priority.id"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-form>
+        </el-col>
+        <el-col :span="4">
           <el-form
             label-position="top"
             :inline="true"
@@ -109,6 +128,7 @@
                 categoryIdList: selectedCategoryIdList,
                 milestoneIdList: selectedMilestoneIdList,
                 assigneeIdList: selectedAssigneeIdList,
+                priorityIdList: selectedPriorityIdList,
                 keyword: inputKeyword
               }"
               @update="updateStatusList()"
@@ -141,6 +161,8 @@ export default {
       selectedCategoryIdList: [],
       milestoneList: [],
       selectedMilestoneIdList: [],
+      priorityList: [],
+      selectedPriorityIdList: [],
       assigneeList: [],
       selectedAssigneeIdList: [],
       inputKeyword: ''
@@ -177,6 +199,8 @@ export default {
     this.assigneeList = await this.fetchAssignees({
       projectId: this.selectedProjectId
     })
+    // 優先度一覧を取得する
+    this.priorityList = await this.fetchPriorities()
   },
   methods: {
     async updateStatusList() {
@@ -190,7 +214,8 @@ export default {
       'fetchProjects',
       'fetchCategories',
       'fetchMilestones',
-      'fetchAssignees'
+      'fetchAssignees',
+      'fetchPriorities'
     ]),
     ...mapActions('issues', ['fetchStatuses'])
   }
