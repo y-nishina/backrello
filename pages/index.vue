@@ -117,9 +117,13 @@
           </el-form>
         </el-col>
       </el-row>
-      <el-row :gutter="20">
+      <el-row class="boardArea">
         <template v-for="status in statusList">
-          <el-col :key="status.id" :span="20 / statusList.length">
+          <el-col
+            :key="status.id"
+            :span="24 / statusList.length"
+            class="issuesWrapper"
+          >
             <Issues
               v-bind="{
                 statusId: status.id,
@@ -224,8 +228,32 @@ export default {
 
 <style lang="scss" scoped>
 .main {
-  * {
+  background-color: #4caf93;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  h2 {
+    color: white;
+  }
+  .issuesWrapper {
+    height: 100%;
+  }
+  .el-row {
+    padding: 4px 8px;
+    &.boardArea {
+      padding: 8px;
+      flex: 1;
+      position: relative;
+      overflow-y: auto;
+    }
+  }
+  .el-form-item {
     margin: 0;
+  }
+  .el-form-item /deep/ .el-form-item__label {
+    color: white;
+    font-weight: bold;
   }
   .el-form--label-top /deep/ .el-form-item__label {
     padding: 0;
