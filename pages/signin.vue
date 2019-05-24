@@ -1,8 +1,13 @@
 <template>
   <div class="signin">
-    <el-row>
-      <h2>ログイン</h2>
-      <el-form :model="signinForm" label-width="150px" label-position="top">
+    <el-row class="signinFormWrapper">
+      <h2>Backrelloにログイン</h2>
+      <el-form
+        :model="signinForm"
+        label-width="150px"
+        label-position="top"
+        class="signinForm"
+      >
         <el-form-item
           label="スペースキー"
           prop="spaceKey"
@@ -21,8 +26,10 @@
         >
           <el-input v-model="signinForm.apiKey"></el-input>
         </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="signin()">ログイン</el-button>
+        <el-form-item class="signinButtonWrapper">
+          <el-button type="success" class="signinButton" @click="signin()"
+            >ログイン</el-button
+          >
         </el-form-item>
       </el-form>
     </el-row>
@@ -72,5 +79,31 @@ export default {
 .signin {
   max-width: 680px;
   margin: auto;
+  h2 {
+    background-color: #4caf93;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    padding: 16px;
+  }
+  .signinFormWrapper {
+    margin-top: 16px;
+  }
+  .signinForm {
+    background-color: #e3eee8;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    padding: 16px;
+  }
+  .signinButtonWrapper {
+    text-align: center;
+    margin: 0;
+  }
+  .signinButton {
+    background-color: #4caf93;
+    border-color: #4caf93;
+  }
+  .el-form--label-top /deep/ .el-form-item__label {
+    padding: 0;
+  }
 }
 </style>

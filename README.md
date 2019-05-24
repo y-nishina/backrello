@@ -1,4 +1,4 @@
-# backrello
+# Backrello
 
 > Show Backlog issues like Trello
 
