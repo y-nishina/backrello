@@ -3,8 +3,30 @@ import axios from 'axios'
 const URL_STATUSES = 'statuses'
 const URL_ISSUES = 'issues'
 
+export const state = () => ({
+  statusList: []
+})
+
+export const getters = {
+  getStatusList(state) {
+    return state.statusList.map(status => {
+      return {
+        id: status.id,
+        name: status.name
+      }
+    })
+  }
+}
+
+export const mutations = {
+  setStatusList(state, statusList) {
+    state.statusList = statusList
+  }
+}
+
 export const actions = {
-  async fetchStatuses(context) {
+  async fetchStatuses({ commit }) {
+    commit('setStatusList', [])
     const response = await axios.get(
       `https://${sessionStorage.getItem(
         'spaceKey'
@@ -15,11 +37,9 @@ export const actions = {
         }
       }
     )
-    if (response.status !== 200) {
-      // TODO エラーの場合の処理を考える
-      return []
+    if (response.status === 200) {
+      commit('setStatusList', response.data)
     }
-    return response.data
   },
   async fetchIssues(context, params) {
     const queryParams = {
@@ -34,6 +54,7 @@ export const actions = {
       queryParams.projectId = params.projectId
     }
 
+    // その他の条件に関しても、未選択の場合は指定しない
     if (params.categoryIdList.length > 0) {
       queryParams.categoryId = params.categoryIdList
     }
@@ -59,7 +80,6 @@ export const actions = {
       }
     )
     if (response.status !== 200) {
-      // TODO エラーの場合の処理を考える
       return []
     }
     return response.data
@@ -79,7 +99,6 @@ export const actions = {
       }
     )
 
-    // ステータスコードが200以外ならNG
     if (response.status !== 200) {
       return false
     }

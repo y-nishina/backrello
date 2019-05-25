@@ -145,7 +145,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import Issues from '~/components/issues'
 export default {
   components: {
@@ -154,18 +154,32 @@ export default {
   data() {
     return {
       loggedInFlag: false,
-      statusList: [],
-      projectList: [],
       selectedProjectId: null,
-      categoryList: [],
       selectedCategoryIdList: [],
-      milestoneList: [],
       selectedMilestoneIdList: [],
-      priorityList: [],
       selectedPriorityIdList: [],
-      assigneeList: [],
       selectedAssigneeIdList: [],
       inputKeyword: ''
+    }
+  },
+  computed: {
+    projectList() {
+      return this.getProjectList()
+    },
+    statusList() {
+      return this.getStatusList()
+    },
+    categoryList() {
+      return this.getCategoryList()
+    },
+    milestoneList() {
+      return this.getMilestoneList()
+    },
+    assigneeList() {
+      return this.getAssigneeList()
+    },
+    priorityList() {
+      return this.getPriorityList()
     }
   },
   async beforeMount() {
@@ -176,41 +190,51 @@ export default {
       this.$router.push({ path: '/signin/', query: {} })
       return
     }
+
     // プロジェクト一覧を取得する
-    this.projectList = await this.fetchProjects()
+    await this.fetchProjects()
     // 一番上のプロジェクトをデフォルトで選択しておく
     if (this.projectList.length > 0) {
       this.selectedProjectId = this.projectList[0].id
     }
 
-    // TODO allでまとめる
     // 状態一覧を取得する
-    this.statusList = await this.fetchStatuses()
-
-    // カテゴリー一覧を取得する
-    this.categoryList = await this.fetchCategories({
-      projectId: this.selectedProjectId
-    })
-    // マイルストーン一覧を取得する
-    this.milestoneList = await this.fetchMilestones({
-      projectId: this.selectedProjectId
-    })
-    // 担当者一覧を取得する
-    this.assigneeList = await this.fetchAssignees({
-      projectId: this.selectedProjectId
-    })
-    // 優先度一覧を取得する
-    this.priorityList = await this.fetchPriorities()
+    this.fetchStatuses()
+    // 検索条件指定のために必要なデータを取得する
+    this.fetchDataForSearchConditions()
   },
   methods: {
-    async updateStatusList() {
-      this.statusList = []
-      this.statusList = await this.fetchStatuses()
+    fetchDataForSearchConditions() {
+      // カテゴリー一覧を取得する
+      this.fetchCategories({
+        projectId: this.selectedProjectId
+      })
+      // マイルストーン一覧を取得する
+      this.fetchMilestones({
+        projectId: this.selectedProjectId
+      })
+      // 担当者一覧を取得する
+      this.fetchAssignees({
+        projectId: this.selectedProjectId
+      })
+      // 優先度一覧を取得する
+      this.fetchPriorities()
+    },
+    updateStatusList() {
+      this.fetchStatuses()
     },
     onChangeSearchConditions() {
       this.updateStatusList()
     },
-    ...mapActions([
+    ...mapGetters('projects', [
+      'getProjectList',
+      'getCategoryList',
+      'getMilestoneList',
+      'getAssigneeList',
+      'getPriorityList'
+    ]),
+    ...mapGetters('issues', ['getStatusList']),
+    ...mapActions('projects', [
       'fetchProjects',
       'fetchCategories',
       'fetchMilestones',
