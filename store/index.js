@@ -4,14 +4,15 @@ const URL_SPACE = 'space'
 
 export const actions = {
   async doAuthentication(context, params) {
-    const response = await axios.get(
-      `https://${params.spaceKey}.backlog.jp/api/v2/${URL_SPACE}`,
-      {
+    const response = await axios
+      .get(`https://${params.spaceKey}.backlog.jp/api/v2/${URL_SPACE}`, {
         params: {
           apiKey: params.apiKey
         }
-      }
-    )
+      })
+      .catch(() => {
+        return false
+      })
 
     // ステータスコードが200以外ならNG
     if (response.status !== 200) {
