@@ -145,10 +145,12 @@ export default {
   components: {
     Issues
   },
+  data() {
+    return {
+      loggedInFlag: false
+    }
+  },
   computed: {
-    loggedInFlag() {
-      return this.getLoggedInFlag()
-    },
     projectList() {
       return this.getProjectList()
     },
@@ -217,6 +219,8 @@ export default {
     }
   },
   async beforeMount() {
+    // sessionStorageにapiKeyが保存されているかどうかでログイン状態を判別
+    this.loggedInFlag = !!sessionStorage.getItem('apiKey')
     if (!this.loggedInFlag) {
       // ログイン済みでなければログイン画面にリダイレクトする
       this.$router.push({ path: '/signin/', query: {} })
@@ -258,7 +262,6 @@ export default {
     onChangeSearchConditions() {
       this.updateStatusList()
     },
-    ...mapGetters(['getLoggedInFlag']),
     ...mapGetters('projects', [
       'getProjectList',
       'getCategoryList',
