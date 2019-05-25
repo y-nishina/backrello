@@ -121,7 +121,7 @@
         <template v-for="status in statusList">
           <el-col
             :key="status.id"
-            :span="24 / statusList.length"
+            :span="Math.floor(24 / statusList.length)"
             class="issuesWrapper"
           >
             <Issues
