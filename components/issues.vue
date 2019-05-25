@@ -37,30 +37,6 @@ export default {
     statusName: {
       type: String,
       required: true
-    },
-    projectId: {
-      type: Number,
-      default: null
-    },
-    categoryIdList: {
-      type: Array,
-      default: () => []
-    },
-    milestoneIdList: {
-      type: Array,
-      default: () => []
-    },
-    assigneeIdList: {
-      type: Array,
-      default: () => []
-    },
-    priorityIdList: {
-      type: Array,
-      default: () => []
-    },
-    keyword: {
-      type: String,
-      default: ''
     }
   },
   data() {
@@ -70,15 +46,7 @@ export default {
     }
   },
   async beforeMount() {
-    this.issueList = await this.fetchIssues({
-      statusId: [this.statusId],
-      projectId: [this.projectId],
-      categoryIdList: this.categoryIdList,
-      milestoneIdList: this.milestoneIdList,
-      assigneeIdList: this.assigneeIdList,
-      priorityIdList: this.priorityIdList,
-      keyword: this.keyword
-    })
+    this.issueList = await this.fetchIssues({ statusId: [this.statusId] })
   },
   methods: {
     handleDragStart(event) {

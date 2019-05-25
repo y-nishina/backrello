@@ -127,13 +127,7 @@
             <Issues
               v-bind="{
                 statusId: status.id,
-                statusName: status.name,
-                projectId: selectedProjectId,
-                categoryIdList: selectedCategoryIdList,
-                milestoneIdList: selectedMilestoneIdList,
-                assigneeIdList: selectedAssigneeIdList,
-                priorityIdList: selectedPriorityIdList,
-                keyword: inputKeyword
+                statusName: status.name
               }"
               @update="updateStatusList()"
             ></Issues>
@@ -145,7 +139,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import Issues from '~/components/issues'
 export default {
   components: {
@@ -153,13 +147,7 @@ export default {
   },
   data() {
     return {
-      loggedInFlag: false,
-      selectedProjectId: null,
-      selectedCategoryIdList: [],
-      selectedMilestoneIdList: [],
-      selectedPriorityIdList: [],
-      selectedAssigneeIdList: [],
-      inputKeyword: ''
+      loggedInFlag: false
     }
   },
   computed: {
@@ -180,6 +168,54 @@ export default {
     },
     priorityList() {
       return this.getPriorityList()
+    },
+    selectedProjectId: {
+      get() {
+        return this.getSelectedProjectId()
+      },
+      set(newValue) {
+        this.setSelectedProjectId(newValue)
+      }
+    },
+    selectedCategoryIdList: {
+      get() {
+        return this.getSelectedCategoryIdList()
+      },
+      set(newValue) {
+        this.setSelectedCategoryIdList(newValue)
+      }
+    },
+    selectedMilestoneIdList: {
+      get() {
+        return this.getSelectedMilestoneIdList()
+      },
+      set(newValue) {
+        this.setSelectedMilestoneIdList(newValue)
+      }
+    },
+    selectedAssigneeIdList: {
+      get() {
+        return this.getSelectedAssigneeIdList()
+      },
+      set(newValue) {
+        this.setSelectedAssigneeIdList(newValue)
+      }
+    },
+    selectedPriorityIdList: {
+      get() {
+        return this.getSelectedPriorityIdList()
+      },
+      set(newValue) {
+        this.setSelectedPriorityIdList(newValue)
+      }
+    },
+    inputKeyword: {
+      get() {
+        return this.getInputKeyword()
+      },
+      set(newValue) {
+        this.setInputKeyword(newValue)
+      }
     }
   },
   async beforeMount() {
@@ -231,9 +267,23 @@ export default {
       'getCategoryList',
       'getMilestoneList',
       'getAssigneeList',
-      'getPriorityList'
+      'getPriorityList',
+      'getSelectedProjectId',
+      'getSelectedCategoryIdList',
+      'getSelectedMilestoneIdList',
+      'getSelectedAssigneeIdList',
+      'getSelectedPriorityIdList',
+      'getInputKeyword'
     ]),
     ...mapGetters('issues', ['getStatusList']),
+    ...mapMutations('projects', [
+      'setSelectedProjectId',
+      'setSelectedCategoryIdList',
+      'setSelectedMilestoneIdList',
+      'setSelectedAssigneeIdList',
+      'setSelectedPriorityIdList',
+      'setInputKeyword'
+    ]),
     ...mapActions('projects', [
       'fetchProjects',
       'fetchCategories',

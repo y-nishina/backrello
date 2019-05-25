@@ -11,7 +11,13 @@ export const state = () => ({
   categoryList: [],
   milestoneList: [],
   assigneeList: [],
-  priorityList: []
+  priorityList: [],
+  selectedProjectId: null,
+  selectedCategoryIdList: [],
+  selectedMilestoneIdList: [],
+  selectedAssigneeIdList: [],
+  selectedPriorityIdList: [],
+  inputKeyword: ''
 })
 
 export const getters = {
@@ -54,6 +60,24 @@ export const getters = {
         name: priority.name
       }
     })
+  },
+  getSelectedProjectId(state) {
+    return state.selectedProjectId
+  },
+  getSelectedCategoryIdList(state) {
+    return state.selectedCategoryIdList
+  },
+  getSelectedMilestoneIdList(state) {
+    return state.selectedMilestoneIdList
+  },
+  getSelectedAssigneeIdList(state) {
+    return state.selectedAssigneeIdList
+  },
+  getSelectedPriorityIdList(state) {
+    return state.selectedPriorityIdList
+  },
+  getInputKeyword(state) {
+    return state.inputKeyword
   }
 }
 
@@ -72,6 +96,24 @@ export const mutations = {
   },
   setPriorityList(state, priorityList) {
     state.priorityList = priorityList
+  },
+  setSelectedProjectId(state, selectedProjectId) {
+    state.selectedProjectId = selectedProjectId
+  },
+  setSelectedCategoryIdList(state, selectedCategoryIdList) {
+    state.selectedCategoryIdList = selectedCategoryIdList
+  },
+  setSelectedMilestoneIdList(state, selectedMilestoneIdList) {
+    state.selectedMilestoneIdList = selectedMilestoneIdList
+  },
+  setSelectedAssigneeIdList(state, selectedAssigneeIdList) {
+    state.selectedAssigneeIdList = selectedAssigneeIdList
+  },
+  setSelectedPriorityIdList(state, selectedPriorityIdList) {
+    state.selectedPriorityIdList = selectedPriorityIdList
+  },
+  setInputKeyword(state, inputKeyword) {
+    state.inputKeyword = inputKeyword
   }
 }
 

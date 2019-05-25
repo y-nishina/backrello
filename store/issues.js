@@ -41,7 +41,7 @@ export const actions = {
       commit('setStatusList', response.data)
     }
   },
-  async fetchIssues(context, params) {
+  async fetchIssues({ rootState }, params) {
     const queryParams = {
       apiKey: sessionStorage.getItem('apiKey'),
       statusId: params.statusId,
@@ -50,25 +50,25 @@ export const actions = {
       order: 'desc'
     }
     // プロジェクトが選択されていない場合はprojectIdを指定しない（全プロジェクトから取得）
-    if (params.projectId[0] !== null) {
-      queryParams.projectId = params.projectId
+    if (rootState.projects.selectedProjectId !== null) {
+      queryParams.projectId = [rootState.projects.selectedProjectId]
     }
 
     // その他の条件に関しても、未選択の場合は指定しない
-    if (params.categoryIdList.length > 0) {
-      queryParams.categoryId = params.categoryIdList
+    if (rootState.projects.selectedCategoryIdList.length > 0) {
+      queryParams.categoryId = rootState.projects.selectedCategoryIdList
     }
-    if (params.milestoneIdList.length > 0) {
-      queryParams.milestoneId = params.milestoneIdList
+    if (rootState.projects.selectedMilestoneIdList.length > 0) {
+      queryParams.milestoneId = rootState.projects.selectedMilestoneIdList
     }
-    if (params.assigneeIdList.length > 0) {
-      queryParams.assigneeId = params.assigneeIdList
+    if (rootState.projects.selectedAssigneeIdList.length > 0) {
+      queryParams.assigneeId = rootState.projects.selectedAssigneeIdList
     }
-    if (params.priorityIdList.length > 0) {
-      queryParams.priorityId = params.priorityIdList
+    if (rootState.projects.selectedPriorityIdList.length > 0) {
+      queryParams.priorityId = rootState.projects.selectedPriorityIdList
     }
-    if (params.keyword !== '') {
-      queryParams.keyword = params.keyword
+    if (rootState.projects.inputKeyword !== '') {
+      queryParams.keyword = rootState.projects.inputKeyword
     }
 
     const response = await axios.get(
