@@ -100,8 +100,8 @@ export default {
     margin: 0 16px;
   }
   .issueListWrapper {
-    background-color: #dfe1e6;
-    border-radius: 3px;
+    background-color: $trello-gray;
+    border-radius: 4px;
     margin: 4px;
     padding: 8px;
     max-height: 100%;

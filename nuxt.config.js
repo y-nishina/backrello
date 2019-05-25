@@ -24,17 +24,21 @@ export default {
   /*
    ** Global CSS
    */
-  css: ['element-ui/lib/theme-chalk/index.css'],
+  css: ['element-ui/lib/theme-chalk/index.css', '~/assets/scss/common.scss'],
 
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['@/plugins/element-ui'],
+  plugins: ['~/plugins/element-ui'],
 
   /*
    ** Nuxt.js modules
    */
-  modules: [],
+  modules: ['@nuxtjs/style-resources'],
+
+  styleResources: {
+    sass: '~/assets/scss/variables.scss'
+  },
 
   /*
    ** Build configuration

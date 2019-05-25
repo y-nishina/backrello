@@ -298,7 +298,7 @@ export default {
 
 <style lang="scss" scoped>
 .main {
-  background-color: #4caf93;
+  background-color: $backlog-green;
   height: 100vh;
   display: flex;
   flex-direction: column;
