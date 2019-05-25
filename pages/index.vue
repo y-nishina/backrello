@@ -121,19 +121,13 @@
         <template v-for="status in statusList">
           <el-col
             :key="status.id"
-            :span="24 / statusList.length"
+            :span="Math.floor(24 / statusList.length)"
             class="issuesWrapper"
           >
             <Issues
               v-bind="{
                 statusId: status.id,
-                statusName: status.name,
-                projectId: selectedProjectId,
-                categoryIdList: selectedCategoryIdList,
-                milestoneIdList: selectedMilestoneIdList,
-                assigneeIdList: selectedAssigneeIdList,
-                priorityIdList: selectedPriorityIdList,
-                keyword: inputKeyword
+                statusName: status.name
               }"
               @update="updateStatusList()"
             ></Issues>
@@ -141,15 +135,11 @@
         </template>
       </el-row>
     </template>
-    <template v-else>
-      <!-- TODO：未ログインの場合に一瞬チラッと見える画面をどうするか検討する -->
-      &nbsp;
-    </template>
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import Issues from '~/components/issues'
 export default {
   components: {
@@ -157,64 +147,144 @@ export default {
   },
   data() {
     return {
-      loggedInFlag: false,
-      statusList: [],
-      projectList: [],
-      selectedProjectId: null,
-      categoryList: [],
-      selectedCategoryIdList: [],
-      milestoneList: [],
-      selectedMilestoneIdList: [],
-      priorityList: [],
-      selectedPriorityIdList: [],
-      assigneeList: [],
-      selectedAssigneeIdList: [],
-      inputKeyword: ''
+      loggedInFlag: false
+    }
+  },
+  computed: {
+    projectList() {
+      return this.getProjectList()
+    },
+    statusList() {
+      return this.getStatusList()
+    },
+    categoryList() {
+      return this.getCategoryList()
+    },
+    milestoneList() {
+      return this.getMilestoneList()
+    },
+    assigneeList() {
+      return this.getAssigneeList()
+    },
+    priorityList() {
+      return this.getPriorityList()
+    },
+    selectedProjectId: {
+      get() {
+        return this.getSelectedProjectId()
+      },
+      set(newValue) {
+        this.setSelectedProjectId(newValue)
+      }
+    },
+    selectedCategoryIdList: {
+      get() {
+        return this.getSelectedCategoryIdList()
+      },
+      set(newValue) {
+        this.setSelectedCategoryIdList(newValue)
+      }
+    },
+    selectedMilestoneIdList: {
+      get() {
+        return this.getSelectedMilestoneIdList()
+      },
+      set(newValue) {
+        this.setSelectedMilestoneIdList(newValue)
+      }
+    },
+    selectedAssigneeIdList: {
+      get() {
+        return this.getSelectedAssigneeIdList()
+      },
+      set(newValue) {
+        this.setSelectedAssigneeIdList(newValue)
+      }
+    },
+    selectedPriorityIdList: {
+      get() {
+        return this.getSelectedPriorityIdList()
+      },
+      set(newValue) {
+        this.setSelectedPriorityIdList(newValue)
+      }
+    },
+    inputKeyword: {
+      get() {
+        return this.getInputKeyword()
+      },
+      set(newValue) {
+        this.setInputKeyword(newValue)
+      }
     }
   },
   async beforeMount() {
     // sessionStorageにapiKeyが保存されているかどうかでログイン状態を判別
     this.loggedInFlag = !!sessionStorage.getItem('apiKey')
     if (!this.loggedInFlag) {
-      // ログインしていなければログイン画面にリダイレクトする
+      // ログイン済みでなければログイン画面にリダイレクトする
       this.$router.push({ path: '/signin/', query: {} })
       return
     }
+
     // プロジェクト一覧を取得する
-    this.projectList = await this.fetchProjects()
+    await this.fetchProjects()
     // 一番上のプロジェクトをデフォルトで選択しておく
     if (this.projectList.length > 0) {
       this.selectedProjectId = this.projectList[0].id
     }
 
-    // TODO allでまとめる
     // 状態一覧を取得する
-    this.statusList = await this.fetchStatuses()
-
-    // カテゴリー一覧を取得する
-    this.categoryList = await this.fetchCategories({
-      projectId: this.selectedProjectId
-    })
-    // マイルストーン一覧を取得する
-    this.milestoneList = await this.fetchMilestones({
-      projectId: this.selectedProjectId
-    })
-    // 担当者一覧を取得する
-    this.assigneeList = await this.fetchAssignees({
-      projectId: this.selectedProjectId
-    })
-    // 優先度一覧を取得する
-    this.priorityList = await this.fetchPriorities()
+    this.fetchStatuses()
+    // 検索条件指定のために必要なデータを取得する
+    this.fetchDataForSearchConditions()
   },
   methods: {
-    async updateStatusList() {
-      this.statusList = []
-      this.statusList = await this.fetchStatuses()
+    fetchDataForSearchConditions() {
+      // カテゴリー一覧を取得する
+      this.fetchCategories({
+        projectId: this.selectedProjectId
+      })
+      // マイルストーン一覧を取得する
+      this.fetchMilestones({
+        projectId: this.selectedProjectId
+      })
+      // 担当者一覧を取得する
+      this.fetchAssignees({
+        projectId: this.selectedProjectId
+      })
+      // 優先度一覧を取得する
+      this.fetchPriorities()
+    },
+    updateStatusList() {
+      this.fetchStatuses()
     },
     onChangeSearchConditions() {
       this.updateStatusList()
     },
-    ...mapActions([
+    ...mapGetters('projects', [
+      'getProjectList',
+      'getCategoryList',
+      'getMilestoneList',
+      'getAssigneeList',
+      'getPriorityList',
+      'getSelectedProjectId',
+      'getSelectedCategoryIdList',
+      'getSelectedMilestoneIdList',
+      'getSelectedAssigneeIdList',
+      'getSelectedPriorityIdList',
+      'getInputKeyword'
+    ]),
+    ...mapGetters('issues', ['getStatusList']),
+    ...mapMutations('projects', [
+      'setSelectedProjectId',
+      'setSelectedCategoryIdList',
+      'setSelectedMilestoneIdList',
+      'setSelectedAssigneeIdList',
+      'setSelectedPriorityIdList',
+      'setInputKeyword'
+    ]),
+    ...mapActions('projects', [
       'fetchProjects',
       'fetchCategories',
       'fetchMilestones',
@@ -228,7 +298,7 @@ export default {
 
 <style lang="scss" scoped>
 .main {
-  background-color: #4caf93;
+  background-color: $backlog-green;
   height: 100vh;
   display: flex;
   flex-direction: column;
