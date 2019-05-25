@@ -3,8 +3,30 @@ import axios from 'axios'
 const URL_STATUSES = 'statuses'
 const URL_ISSUES = 'issues'
 
+export const state = () => ({
+  statusList: []
+})
+
+export const getters = {
+  getStatusList(state) {
+    return state.statusList.map(status => {
+      return {
+        id: status.id,
+        name: status.name
+      }
+    })
+  }
+}
+
+export const mutations = {
+  setStatusList(state, statusList) {
+    state.statusList = statusList
+  }
+}
+
 export const actions = {
-  async fetchStatuses(context) {
+  async fetchStatuses({ commit }) {
+    commit('setStatusList', [])
     const response = await axios.get(
       `https://${sessionStorage.getItem(
         'spaceKey'
@@ -15,13 +37,11 @@ export const actions = {
         }
       }
     )
-    if (response.status !== 200) {
-      // TODO エラーの場合の処理を考える
-      return []
+    if (response.status === 200) {
+      commit('setStatusList', response.data)
     }
-    return response.data
   },
-  async fetchIssues(context, params) {
+  async fetchIssues({ rootState }, params) {
     const queryParams = {
       apiKey: sessionStorage.getItem('apiKey'),
       statusId: params.statusId,
@@ -30,24 +50,25 @@ export const actions = {
       order: 'desc'
     }
     // プロジェクトが選択されていない場合はprojectIdを指定しない（全プロジェクトから取得）
-    if (params.projectId[0] !== null) {
-      queryParams.projectId = params.projectId
+    if (rootState.projects.selectedProjectId !== null) {
+      queryParams.projectId = [rootState.projects.selectedProjectId]
     }
 
-    if (params.categoryIdList.length > 0) {
-      queryParams.categoryId = params.categoryIdList
+    // その他の条件に関しても、未選択の場合は指定しない
+    if (rootState.projects.selectedCategoryIdList.length > 0) {
+      queryParams.categoryId = rootState.projects.selectedCategoryIdList
     }
-    if (params.milestoneIdList.length > 0) {
-      queryParams.milestoneId = params.milestoneIdList
+    if (rootState.projects.selectedMilestoneIdList.length > 0) {
+      queryParams.milestoneId = rootState.projects.selectedMilestoneIdList
     }
-    if (params.assigneeIdList.length > 0) {
-      queryParams.assigneeId = params.assigneeIdList
+    if (rootState.projects.selectedAssigneeIdList.length > 0) {
+      queryParams.assigneeId = rootState.projects.selectedAssigneeIdList
     }
-    if (params.priorityIdList.length > 0) {
-      queryParams.priorityId = params.priorityIdList
+    if (rootState.projects.selectedPriorityIdList.length > 0) {
+      queryParams.priorityId = rootState.projects.selectedPriorityIdList
     }
-    if (params.keyword !== '') {
-      queryParams.keyword = params.keyword
+    if (rootState.projects.inputKeyword !== '') {
+      queryParams.keyword = rootState.projects.inputKeyword
     }
 
     const response = await axios.get(
@@ -59,7 +80,6 @@ export const actions = {
       }
     )
     if (response.status !== 200) {
-      // TODO エラーの場合の処理を考える
       return []
     }
     return response.data
@@ -79,7 +99,6 @@ export const actions = {
       }
     )
 
-    // ステータスコードが200以外ならNG
     if (response.status !== 200) {
       return false
     }

@@ -7,7 +7,7 @@ export default {
    ** Headers of the page
    */
   head: {
-    title: pkg.name,
+    title: 'Backrello',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -24,17 +24,21 @@ export default {
   /*
    ** Global CSS
    */
-  css: ['element-ui/lib/theme-chalk/index.css'],
+  css: ['element-ui/lib/theme-chalk/index.css', '~/assets/scss/common.scss'],
 
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['@/plugins/element-ui'],
+  plugins: ['~/plugins/element-ui'],
 
   /*
    ** Nuxt.js modules
    */
-  modules: [],
+  modules: ['@nuxtjs/style-resources'],
+
+  styleResources: {
+    sass: '~/assets/scss/variables.scss'
+  },
 
   /*
    ** Build configuration

@@ -3,10 +3,12 @@
     <el-row class="signinFormWrapper">
       <h2>Backrelloにログイン</h2>
       <el-form
+        ref="signinForm"
         :model="signinForm"
         label-width="150px"
         label-position="top"
         class="signinForm"
+        @submit.native.prevent="signin"
       >
         <el-form-item
           label="スペースキー"
@@ -27,7 +29,7 @@
           <el-input v-model="signinForm.apiKey"></el-input>
         </el-form-item>
         <el-form-item class="signinButtonWrapper">
-          <el-button type="success" class="signinButton" @click="signin()"
+          <el-button type="success" class="signinButton" native-type="submit"
             >ログイン</el-button
           >
         </el-form-item>
@@ -63,12 +65,20 @@ export default {
     }
   },
   methods: {
-    async signin() {
-      const result = await this.doAuthentication(this.signinForm)
-      if (result === true) {
-        // ログインに成功したらメイン画面に遷移する
-        this.$router.push({ path: '/', query: {} })
-      }
+    signin() {
+      this.$refs.signinForm.validate(async valid => {
+        if (valid) {
+          const result = await this.doAuthentication(this.signinForm)
+          if (result === true) {
+            // ログインに成功したらメイン画面に遷移する
+            this.$router.push({ path: '/', query: {} })
+          } else {
+            this.$message.error('ログインできませんでした。')
+          }
+        } else {
+          return false
+        }
+      })
     },
     ...mapActions(['doAuthentication'])
   }
@@ -80,18 +90,18 @@ export default {
   max-width: 680px;
   margin: auto;
   h2 {
-    background-color: #4caf93;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
+    background-color: $backlog-green;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
     padding: 16px;
   }
   .signinFormWrapper {
     margin-top: 16px;
   }
   .signinForm {
-    background-color: #e3eee8;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
+    background-color: $backlog-green-light;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
     padding: 16px;
   }
   .signinButtonWrapper {
@@ -99,8 +109,8 @@ export default {
     margin: 0;
   }
   .signinButton {
-    background-color: #4caf93;
-    border-color: #4caf93;
+    background-color: $backlog-green;
+    border-color: $backlog-green;
   }
   .el-form--label-top /deep/ .el-form-item__label {
     padding: 0;
