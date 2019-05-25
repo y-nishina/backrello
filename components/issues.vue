@@ -4,8 +4,8 @@
     :class="{ over: isOver }"
     @dragstart="handleDragStart($event)"
     @dragover="handleDragOver($event)"
-    @dragleave="handleDragLeave($event)"
-    @dragend="handleDragEnd($event)"
+    @dragleave="handleDragLeave()"
+    @dragend="handleDragEnd()"
     @drop="handleDrop($event)"
   >
     <div class="issueListWrapper">
@@ -64,10 +64,10 @@ export default {
 
       return false
     },
-    handleDragLeave(event) {
+    handleDragLeave() {
       this.isOver = false
     },
-    handleDragEnd(event) {
+    handleDragEnd() {
       this.isOver = false
     },
     async handleDrop(event) {

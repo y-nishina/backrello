@@ -27,7 +27,7 @@
           <el-input v-model="signinForm.apiKey"></el-input>
         </el-form-item>
         <el-form-item class="signinButtonWrapper">
-          <el-button type="success" class="signinButton" @click="signin()"
+          <el-button type="success" class="signinButton" @click="signin"
             >ログイン</el-button
           >
         </el-form-item>
