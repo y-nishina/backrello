@@ -19,7 +19,7 @@ export const mutations = {
 }
 
 export const actions = {
-  async doAuthentication(context, params) {
+  async doAuthentication({ commit }, params) {
     commit('setLoggedInFlag', false)
     const response = await axios.get(
       `https://${params.spaceKey}.backlog.jp/api/v2/${URL_SPACE}`,
@@ -42,7 +42,7 @@ export const actions = {
     // OKだったらspaceKeyとapiKeyをsessionStorageに保持する
     sessionStorage.setItem('spaceKey', params.spaceKey)
     sessionStorage.setItem('apiKey', params.apiKey)
-    
+
     commit('setLoggedInFlag', true)
 
     return true
