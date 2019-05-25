@@ -141,10 +141,6 @@
         </template>
       </el-row>
     </template>
-    <template v-else>
-      <!-- TODO：未ログインの場合に一瞬チラッと見える画面をどうするか検討する -->
-      &nbsp;
-    </template>
   </div>
 </template>
 
