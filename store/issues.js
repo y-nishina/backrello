@@ -28,9 +28,7 @@ export const actions = {
   async fetchStatuses({ commit }) {
     commit('setStatusList', [])
     const response = await axios.get(
-      `https://${sessionStorage.getItem(
-        'spaceKey'
-      )}.backlog.jp/api/v2/${URL_STATUSES}`,
+      `https://${sessionStorage.getItem('spaceUrl')}/api/v2/${URL_STATUSES}`,
       {
         params: {
           apiKey: sessionStorage.getItem('apiKey')
@@ -72,9 +70,7 @@ export const actions = {
     }
 
     const response = await axios.get(
-      `https://${sessionStorage.getItem(
-        'spaceKey'
-      )}.backlog.jp/api/v2/${URL_ISSUES}`,
+      `https://${sessionStorage.getItem('spaceUrl')}/api/v2/${URL_ISSUES}`,
       {
         params: queryParams
       }
@@ -86,9 +82,9 @@ export const actions = {
   },
   async changeIssueStatus(context, params) {
     const response = await axios.patch(
-      `https://${sessionStorage.getItem(
-        'spaceKey'
-      )}.backlog.jp/api/v2/${URL_ISSUES}/${params.id}`,
+      `https://${sessionStorage.getItem('spaceUrl')}/api/v2/${URL_ISSUES}/${
+        params.id
+      }`,
       {
         statusId: params.statusId
       },
