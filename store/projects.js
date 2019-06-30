@@ -121,9 +121,7 @@ export const actions = {
   async fetchProjects({ commit }) {
     commit('setProjectList', [])
     const response = await axios.get(
-      `https://${sessionStorage.getItem(
-        'spaceKey'
-      )}.backlog.jp/api/v2/${URL_PROJECTS}`,
+      `https://${sessionStorage.getItem('spaceUrl')}/api/v2/${URL_PROJECTS}`,
       {
         params: {
           apiKey: sessionStorage.getItem('apiKey')
@@ -138,9 +136,7 @@ export const actions = {
   async fetchCategories({ commit }, params) {
     commit('setCategoryList', [])
     const response = await axios.get(
-      `https://${sessionStorage.getItem(
-        'spaceKey'
-      )}.backlog.jp/api/v2/${URL_PROJECTS}/${
+      `https://${sessionStorage.getItem('spaceUrl')}/api/v2/${URL_PROJECTS}/${
         params.projectId
       }/${URL_CATEGORIES}`,
       {
@@ -157,9 +153,9 @@ export const actions = {
   async fetchMilestones({ commit }, params) {
     commit('setMilestoneList', [])
     const response = await axios.get(
-      `https://${sessionStorage.getItem(
-        'spaceKey'
-      )}.backlog.jp/api/v2/${URL_PROJECTS}/${params.projectId}/${URL_VERSIONS}`,
+      `https://${sessionStorage.getItem('spaceUrl')}/api/v2/${URL_PROJECTS}/${
+        params.projectId
+      }/${URL_VERSIONS}`,
       {
         params: {
           apiKey: sessionStorage.getItem('apiKey')
@@ -174,9 +170,9 @@ export const actions = {
   async fetchAssignees({ commit }, params) {
     commit('setAssigneeList', [])
     const response = await axios.get(
-      `https://${sessionStorage.getItem(
-        'spaceKey'
-      )}.backlog.jp/api/v2/${URL_PROJECTS}/${params.projectId}/${URL_USERS}`,
+      `https://${sessionStorage.getItem('spaceUrl')}/api/v2/${URL_PROJECTS}/${
+        params.projectId
+      }/${URL_USERS}`,
       {
         params: {
           apiKey: sessionStorage.getItem('apiKey')
@@ -191,9 +187,7 @@ export const actions = {
   async fetchPriorities({ commit }) {
     commit('setPriorityList', [])
     const response = await axios.get(
-      `https://${sessionStorage.getItem(
-        'spaceKey'
-      )}.backlog.jp/api/v2/${URL_PRIORITIES}`,
+      `https://${sessionStorage.getItem('spaceUrl')}/api/v2/${URL_PRIORITIES}`,
       {
         params: {
           apiKey: sessionStorage.getItem('apiKey')

@@ -11,13 +11,13 @@
         @submit.native.prevent="signin"
       >
         <el-form-item
-          label="スペースキー"
-          prop="spaceKey"
+          label="スペースURL"
+          prop="spaceUrl"
           :rules="[
-            { required: true, message: 'スペースキーは必ず入力してください' }
+            { required: true, message: 'スペースURLは必ず入力してください' }
           ]"
         >
-          <el-input v-model="signinForm.spaceKey"></el-input>
+          <el-input v-model="signinForm.spaceUrl"></el-input>
         </el-form-item>
         <el-form-item
           label="APIキー"
@@ -37,10 +37,10 @@
     </el-row>
     <el-row>
       <div>
-        スペースキーとAPIキーを入力してログインをおこないます
+        スペースURLとAPIキーを入力してログインをおこないます
       </div>
       <div>
-        ※スペースキーはbacklogのURL（https://XXX.backlog.jp/）のXXXの部分
+        ※スペースURLはbacklogのURL（https://XXX.backlog.jp/）の"XXX.backlog.jp"の部分（backlog.com等のドメインにも対応）
       </div>
       <div>
         ※APIキーに関しては<a
@@ -59,7 +59,7 @@ export default {
   data() {
     return {
       signinForm: {
-        spaceKey: '',
+        spaceUrl: '',
         apiKey: ''
       }
     }
